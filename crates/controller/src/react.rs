@@ -65,6 +65,10 @@ pub enum ReActAction {
         objective: String,
         context: String,
     },
+    /// Select MCP server for a task (v0.2 autonomous capability).
+    McpSelect {
+        task_description: String,
+    },
 }
 
 /// ReAct controller for executing complex tasks.
@@ -85,6 +89,8 @@ pub struct ReActController {
     compression_config: CompressionConfig,
     /// Delegator for subagent spawning (v0.2).
     delegator: Option<Arc<dyn Delegator>>,
+    /// MCP Registry for autonomous server selection (v0.2).
+    mcp_registry: Option<Arc<mutilAgent_skills::McpRegistry>>,
 }
 
 impl ReActController {
@@ -99,6 +105,7 @@ impl ReActController {
             compressor: Some(Arc::new(TruncationCompressor::new())), // Default compressor
             compression_config: CompressionConfig::default(),
             delegator: None,
+            mcp_registry: None,
         }
     }
 
@@ -141,6 +148,12 @@ impl ReActController {
     /// Set the delegator for subagent spawning (v0.2 autonomous capability).
     pub fn with_delegator(mut self, delegator: Arc<dyn Delegator>) -> Self {
         self.delegator = Some(delegator);
+        self
+    }
+
+    /// Set the MCP registry for autonomous server selection (v0.2).
+    pub fn with_mcp_registry(mut self, registry: Arc<mutilAgent_skills::McpRegistry>) -> Self {
+        self.mcp_registry = Some(registry);
         self
     }
 
@@ -269,6 +282,14 @@ Always think before acting. Be concise and focused on the goal."#
                     String::new()
                 };
                 return ReActAction::Delegate { objective, context };
+            }
+        }
+
+        // Check for MCP_SELECT (v0.2 autonomous MCP selection)
+        if response_trimmed.contains("MCP_SELECT:") {
+            if let Some((_mcp_part, rest)) = response_trimmed.split_once("MCP_SELECT:") {
+                let task_description = rest.lines().next().unwrap_or("").trim().to_string();
+                return ReActAction::McpSelect { task_description };
             }
         }
 
@@ -418,6 +439,54 @@ Always think before acting. Be concise and focused on the goal."#
                 session.history.push(HistoryEntry {
                     role: "user".to_string(),
                     content: format!("DELEGATION RESULT: {}", observation),
+                    tool_call: None,
+                    timestamp: chrono_timestamp(),
+                });
+
+                // Update task state
+                if let Some(ref mut task_state) = session.task_state {
+                    task_state.observations.push(observation);
+                }
+
+                Ok(None) // Continue loop
+            }
+
+            ReActAction::McpSelect { task_description } => {
+                // v0.2: Autonomous MCP server selection
+                tracing::info!(task = %task_description, "Selecting MCP server for task");
+
+                let observation = if let Some(ref registry) = self.mcp_registry {
+                    match registry.select_for_task(&task_description) {
+                        Some(server) => {
+                            // Connect to the selected server
+                            match registry.connect_server(&server.id).await {
+                                Ok(()) => format!(
+                                    "Selected and connected to MCP server '{}' ({}). Capabilities: {:?}. You can now use tools from this server.",
+                                    server.name, server.id, server.capabilities
+                                ),
+                                Err(e) => format!(
+                                    "Selected MCP server '{}' but connection failed: {}",
+                                    server.name, e
+                                ),
+                            }
+                        }
+                        None => format!(
+                            "No suitable MCP server found for task: '{}'. Available servers: {:?}",
+                            task_description,
+                            registry.list_all().iter().map(|s| &s.name).collect::<Vec<_>>()
+                        ),
+                    }
+                } else {
+                    format!(
+                        "MCP Registry not configured. Cannot select server for: {}",
+                        task_description
+                    )
+                };
+
+                // Add MCP selection result to history
+                session.history.push(HistoryEntry {
+                    role: "user".to_string(),
+                    content: format!("MCP SELECTION RESULT: {}", observation),
                     tool_call: None,
                     timestamp: chrono_timestamp(),
                 });
