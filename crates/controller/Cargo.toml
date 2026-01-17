@@ -8,6 +8,7 @@ mutilAgent-core.workspace = true
 mutilAgent-store.workspace = true
 mutilAgent-skills.workspace = true
 mutilAgent-model-gateway.workspace = true
+mutilAgent-governance.workspace = true
 tokio.workspace = true
 async-trait.workspace = true
 tracing.workspace = true

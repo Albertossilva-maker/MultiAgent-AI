@@ -24,6 +24,9 @@ use mutilAgent_core::{
 use crate::context::{ContextCompressor, CompressionConfig, TruncationCompressor};
 use crate::delegation::{Delegator, DelegationRequest};
 
+// v0.3: Security Integration
+use mutilAgent_governance::Guardrail;
+
 /// ReAct controller configuration.
 #[derive(Debug, Clone)]
 pub struct ReActConfig {
@@ -91,6 +94,8 @@ pub struct ReActController {
     delegator: Option<Arc<dyn Delegator>>,
     /// MCP Registry for autonomous server selection (v0.2).
     mcp_registry: Option<Arc<mutilAgent_skills::McpRegistry>>,
+    /// Security guardrails for input/output validation (v0.3).
+    security: Option<Arc<dyn Guardrail>>,
 }
 
 impl ReActController {
@@ -106,6 +111,7 @@ impl ReActController {
             compression_config: CompressionConfig::default(),
             delegator: None,
             mcp_registry: None,
+            security: None,
         }
     }
 
@@ -154,6 +160,12 @@ impl ReActController {
     /// Set the MCP registry for autonomous server selection (v0.2).
     pub fn with_mcp_registry(mut self, registry: Arc<mutilAgent_skills::McpRegistry>) -> Self {
         self.mcp_registry = Some(registry);
+        self
+    }
+
+    /// Set security guardrails for input/output validation (v0.3).
+    pub fn with_security(mut self, security: Arc<dyn Guardrail>) -> Self {
+        self.security = Some(security);
         self
     }
 
@@ -329,6 +341,25 @@ Always think before acting. Be concise and focused on the goal."#
             }
         }
 
+        // v0.3: Security check on input before LLM call
+        if let Some(ref security) = self.security {
+            // Check the last user message for security violations
+            if let Some(last_user_msg) = messages.iter().rev().find(|m| m.role == "user") {
+                let check = security.check_input(&last_user_msg.content).await?;
+                if !check.passed {
+                    tracing::warn!(
+                        reason = ?check.reason,
+                        violation = ?check.violation_type,
+                        "Security check failed on input"
+                    );
+                    return Err(Error::controller(format!(
+                        "Security violation: {}",
+                        check.reason.unwrap_or_else(|| "Unknown".to_string())
+                    )));
+                }
+            }
+        }
+
         // Call LLM with (possibly compressed) messages
         let response: LlmResponse = llm.chat(&messages).await?;
 
@@ -357,6 +388,21 @@ Always think before acting. Be concise and focused on the goal."#
 
         match action {
             ReActAction::FinalAnswer(answer) => {
+                // v0.3: Security check on output before returning
+                if let Some(ref security) = self.security {
+                    let check = security.check_output(&answer).await?;
+                    if !check.passed {
+                        tracing::warn!(
+                            reason = ?check.reason,
+                            violation = ?check.violation_type,
+                            "Security check failed on output"
+                        );
+                        return Err(Error::controller(format!(
+                            "Output security violation: {}",
+                            check.reason.unwrap_or_else(|| "Unknown".to_string())
+                        )));
+                    }
+                }
                 tracing::info!(answer_len = answer.len(), "Task completed with final answer");
                 Ok(Some(AgentResult::Text(answer)))
             }
@@ -534,6 +580,19 @@ impl Controller for ReActController {
     async fn execute(&self, intent: UserIntent) -> Result<AgentResult> {
         match intent {
             UserIntent::FastAction { tool_name, args } => {
+                // v0.3: Security check on tool args (as input)
+                if let Some(ref security) = self.security {
+                    let input_str = serde_json::to_string(&args).unwrap_or_default();
+                    let check = security.check_input(&input_str).await?;
+                    if !check.passed {
+                        tracing::warn!(?check, "Security check failed on fast action args");
+                        return Ok(AgentResult::Error {
+                            message: format!("Security violation: {}", check.reason.unwrap_or_default()),
+                            code: "SECURITY_VIOLATION".to_string(),
+                        });
+                    }
+                }
+
                 // Fast path: direct tool execution
                 tracing::info!(tool = %tool_name, "Fast path execution");
 
@@ -568,6 +627,18 @@ impl Controller for ReActController {
                 context_summary,
                 visual_refs,
             } => {
+                // v0.3: Security check on goal
+                if let Some(ref security) = self.security {
+                    let check = security.check_input(&goal).await?;
+                    if !check.passed {
+                        tracing::warn!(?check, "Security check failed on complex mission goal");
+                        return Ok(AgentResult::Error {
+                            message: format!("Security violation: {}", check.reason.unwrap_or_default()),
+                            code: "SECURITY_VIOLATION".to_string(),
+                        });
+                    }
+                }
+
                 // Slow path: ReAct loop
                 tracing::info!(
                     goal = %goal,
