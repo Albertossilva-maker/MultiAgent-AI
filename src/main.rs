@@ -163,9 +163,27 @@ async fn main() -> anyhow::Result<()> {
     
     // Initialize Governance Components
     let audit_store = Arc::new(multi_agent_governance::FileAuditStore::new("audit.log"));
+    
+    // Secrets manager for encrypting API keys
     // In prod, key should come from Kms/Env. For now, random.
-    let _secrets_manager = Arc::new(multi_agent_governance::AesGcmSecretsManager::new(None)); 
-    let rbac = Arc::new(multi_agent_governance::NoOpRbacConnector);
+    let secrets_manager: Arc<dyn multi_agent_governance::SecretsManager> = 
+        Arc::new(multi_agent_governance::AesGcmSecretsManager::new(None));
+    
+    // RBAC: Check environment for production mode
+    let is_production = std::env::var("MULTIAGENT_ENV")
+        .map(|v| v.to_lowercase() == "production")
+        .unwrap_or(false);
+    
+    let rbac: Arc<dyn multi_agent_governance::RbacConnector> = if is_production {
+        // Production: Require OIDC configuration
+        let oidc_issuer = std::env::var("OIDC_ISSUER")
+            .expect("OIDC_ISSUER is required in production mode. Set MULTIAGENT_ENV=development to disable.");
+        tracing::info!(issuer = %oidc_issuer, "Initializing OIDC RBAC connector for production");
+        Arc::new(multi_agent_governance::rbac::OidcRbacConnector::new(&oidc_issuer))
+    } else {
+        tracing::warn!("Using NoOpRbacConnector - NOT SUITABLE FOR PRODUCTION");
+        Arc::new(multi_agent_governance::NoOpRbacConnector)
+    };
 
     // Initialize MCP Registry
     let mcp_registry = Arc::new(multi_agent_skills::McpRegistry::new());
@@ -177,6 +195,7 @@ async fn main() -> anyhow::Result<()> {
         metrics: Some(metrics_handle.clone()),
         mcp_registry: mcp_registry.clone(),
         providers: Arc::new(tokio::sync::RwLock::new(Vec::new())),
+        secrets: secrets_manager,
     });
     
     // =========================================================================

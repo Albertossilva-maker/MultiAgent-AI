@@ -102,8 +102,21 @@ impl GatewayServer {
 
     /// Build the Axum router.
     pub fn build_router(&self) -> Router {
+        use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
+        
+        // Rate limit: ~120 requests per minute per IP
+        let governor_conf = GovernorConfigBuilder::default()
+            .per_second(2) // ~120/min
+            .burst_size(30) // Allow bursts
+            .finish()
+            .expect("Failed to build rate limiter config");
+        let governor_limiter = GovernorLayer {
+            config: std::sync::Arc::new(governor_conf),
+        };
+        
         let mut router = Router::new()
             .route("/health", get(health_handler))
+
             .route("/v1/chat", post(chat_handler))
             .route("/v1/intent", post(intent_handler))
             .route("/v1/webhook/{event_type}", post(webhook_handler))
@@ -118,8 +131,28 @@ impl GatewayServer {
             router = router.nest("/admin", multi_agent_admin::admin_router(admin_state.clone()));
         }
 
+        // Rate limiting layer
+        router = router.layer(governor_limiter);
+
         if self.config.enable_cors {
-            router = router.layer(CorsLayer::new().allow_origin(Any).allow_methods(Any));
+            // CORS: Check for allowed origins
+            let origins = std::env::var("ALLOWED_ORIGINS").ok();
+            if let Some(ref origins_str) = origins {
+                use axum::http::HeaderValue;
+                let origins: Vec<HeaderValue> = origins_str
+                    .split(',')
+                    .filter_map(|s| s.trim().parse().ok())
+                    .collect();
+                router = router.layer(
+                    CorsLayer::new()
+                        .allow_origin(origins)
+                        .allow_methods(Any)
+                );
+            } else {
+                // Development: Allow any origin (with warning)
+                tracing::warn!("CORS: ALLOWED_ORIGINS not set, allowing all origins");
+                router = router.layer(CorsLayer::new().allow_origin(Any).allow_methods(Any));
+            }
         }
 
         if self.config.enable_tracing {
@@ -128,6 +161,7 @@ impl GatewayServer {
 
         router
     }
+
 
     /// Run the server.
     pub async fn run(self) -> Result<()> {

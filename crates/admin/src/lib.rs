@@ -29,6 +29,7 @@ use multi_agent_governance::{AuditStore, AuditFilter, AuditEntry, RbacConnector}
 struct Asset;
 
 use multi_agent_skills::mcp_registry::{McpRegistry, McpServerInfo};
+use multi_agent_governance::SecretsManager;
 
 // =========================================
 // State & Data Structures
@@ -41,6 +42,8 @@ pub struct AdminState {
     pub metrics: Option<metrics_exporter_prometheus::PrometheusHandle>,
     pub mcp_registry: Arc<McpRegistry>,
     pub providers: Arc<RwLock<Vec<ProviderEntry>>>,
+    /// Secrets manager for encrypting sensitive data (API keys).
+    pub secrets: Arc<dyn SecretsManager>,
 }
 
 /// LLM Provider entry.
@@ -54,11 +57,14 @@ pub struct ProviderEntry {
     pub base_url: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+    /// Key ID for retrieving the encrypted API key from SecretsManager.
+    /// The actual API key is never stored in plain text.
     #[serde(skip_serializing)]
-    pub api_key: String,
+    pub api_key_id: String,
     pub capabilities: Vec<String>,
     pub status: String,
 }
+
 
 /// Request to add a provider.
 #[derive(Debug, Deserialize)]
@@ -178,14 +184,21 @@ async fn add_provider(
     State(state): State<Arc<AdminState>>,
     Json(req): Json<AddProviderRequest>,
 ) -> Result<Json<ProviderEntry>, StatusCode> {
+    let provider_id = format!("prov-{}", chrono::Utc::now().timestamp_millis());
+    
+    // Encrypt the API key and store it in the secrets manager
+    let api_key_id = format!("api_key:{}", provider_id);
+    state.secrets.store(&api_key_id, &req.api_key).await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    
     let entry = ProviderEntry {
-        id: format!("prov-{}", chrono::Utc::now().timestamp_millis()),
+        id: provider_id,
         vendor: req.vendor,
         model_id: req.model_id,
         description: req.description,
         base_url: req.base_url,
         version: req.version,
-        api_key: req.api_key,
+        api_key_id, // Store reference to encrypted key, not the key itself
         capabilities: req.capabilities,
         status: "pending".to_string(),
     };
@@ -195,6 +208,7 @@ async fn add_provider(
 
     Ok(Json(entry))
 }
+
 
 /// Test provider connection.
 async fn test_provider(
@@ -227,11 +241,16 @@ async fn test_provider_by_id(
     let mut providers = state.providers.write().await;
     
     if let Some(provider) = providers.iter_mut().find(|p| p.id == id) {
+        // Decrypt the API key from secrets manager
+        let api_key = state.secrets.retrieve(&provider.api_key_id).await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+            .ok_or(StatusCode::NOT_FOUND)?;
+        
         let client = reqwest::Client::new();
         
         let result = client
             .get(&format!("{}/models", provider.base_url))
-            .header("Authorization", format!("Bearer {}", provider.api_key))
+            .header("Authorization", format!("Bearer {}", api_key))
             .timeout(std::time::Duration::from_secs(5))
             .send()
             .await;
@@ -251,15 +270,24 @@ async fn test_provider_by_id(
     }
 }
 
+
 /// Delete a provider.
 async fn delete_provider(
     State(state): State<Arc<AdminState>>,
     Path(id): Path<String>,
 ) -> StatusCode {
     let mut providers = state.providers.write().await;
-    providers.retain(|p| p.id != id);
+    
+    // Find and remove the provider, cleaning up secrets
+    if let Some(pos) = providers.iter().position(|p| p.id == id) {
+        let provider = providers.remove(pos);
+        // Clean up the encrypted API key
+        let _ = state.secrets.delete(&provider.api_key_id).await;
+    }
+    
     StatusCode::NO_CONTENT
 }
+
 
 // =========================================
 // Persistence Endpoints
