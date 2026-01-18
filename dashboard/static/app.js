@@ -3,14 +3,17 @@
 const API_BASE = '/admin';
 
 // Tab navigation
-document.querySelectorAll('.nav-links a').forEach(link => {
+// Tab navigation
+document.querySelectorAll('.nav-menu .nav-item').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
-        const tab = e.target.dataset.tab;
+        // Handle click on icon or span inside anchor
+        const target = e.target.closest('.nav-item');
+        const tab = target.dataset.tab;
 
         // Update active link
-        document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-        e.target.classList.add('active');
+        document.querySelectorAll('.nav-menu .nav-item').forEach(l => l.classList.remove('active'));
+        target.classList.add('active');
 
         // Update active tab content
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -19,25 +22,41 @@ document.querySelectorAll('.nav-links a').forEach(link => {
         // Update header title
         const titles = {
             overview: 'Dashboard Overview',
-            config: 'Configuration',
-            metrics: 'Metrics',
-            audit: 'Audit Log'
+            config: 'System Configuration',
+            metrics: 'Performance Metrics',
+            audit: 'Audit Trails'
         };
-        document.getElementById('page-title').textContent = titles[tab];
+        const pageTitle = document.getElementById('page-title');
+        if (pageTitle) pageTitle.textContent = titles[tab];
+
+        // Update breadcrumbs
+        const breadcrumbs = document.querySelector('.breadcrumbs');
+        if (breadcrumbs) breadcrumbs.textContent = `Dashboard / ${titles[tab]}`;
     });
 });
+
+// Fetch wrapper with auth
+async function fetchWithAuth(url) {
+    // Hardcoded for demo/preview since there is no login page yet
+    const token = 'admin';
+    return fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+}
 
 // Fetch config
 async function loadConfig() {
     try {
-        const res = await fetch(`${API_BASE}/config`);
+        const res = await fetchWithAuth(`${API_BASE}/config`);
         const data = await res.json();
 
         document.getElementById('cfg-version').value = data.version;
 
         const featuresDiv = document.getElementById('cfg-features');
         featuresDiv.innerHTML = data.features
-            .map(f => `<span class="feature-tag">${f}</span>`)
+            .map(f => `<span class="tag">${f}</span>`)
             .join('');
     } catch (err) {
         console.error('Failed to load config:', err);
@@ -47,7 +66,7 @@ async function loadConfig() {
 // Fetch metrics
 async function loadMetrics() {
     try {
-        const res = await fetch(`${API_BASE}/metrics`);
+        const res = await fetchWithAuth(`${API_BASE}/metrics`);
         const data = await res.json();
 
         document.getElementById('stat-requests').textContent = data.requests_total.toLocaleString();
@@ -69,12 +88,12 @@ async function loadAuditLogs() {
     if (action) url += `&action=${encodeURIComponent(action)}`;
 
     try {
-        const res = await fetch(url);
+        const res = await fetchWithAuth(url);
         const entries = await res.json();
 
         const tbody = document.getElementById('audit-body');
         if (entries.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5">No audit entries</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No audit entries found</td></tr>';
             return;
         }
 

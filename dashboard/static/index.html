@@ -1,108 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiagent Admin Dashboard</title>
+    <title>Multiagent Admin</title>
+
+    <!-- Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons: FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <nav class="sidebar">
-        <div class="logo">
-            <h2>🤖 Multiagent</h2>
-            <span class="version">v0.8</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#" class="active" data-tab="overview">📊 Overview</a></li>
-            <li><a href="#" data-tab="config">⚙️ Configuration</a></li>
-            <li><a href="#" data-tab="metrics">📈 Metrics</a></li>
-            <li><a href="#" data-tab="audit">📋 Audit Log</a></li>
-        </ul>
-        <div class="user-info">
-            <span class="avatar">👤</span>
-            <span class="username">admin</span>
-        </div>
-    </nav>
-
-    <main class="content">
-        <header class="header">
-            <h1 id="page-title">Dashboard Overview</h1>
-            <div class="status-indicator">
-                <span class="dot online"></span>
-                <span>System Healthy</span>
-            </div>
-        </header>
-
-        <section id="overview" class="tab-content active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Requests</h3>
-                    <div class="stat-value" id="stat-requests">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Tokens Used</h3>
-                    <div class="stat-value" id="stat-tokens">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Active Sessions</h3>
-                    <div class="stat-value" id="stat-sessions">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Avg Latency</h3>
-                    <div class="stat-value" id="stat-latency">0ms</div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-robot logo-icon"></i>
+                    <div class="logo-text">
+                        <h2>Multiagent</h2>
+                        <span class="badge-version">v0.8</span>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <section id="config" class="tab-content">
-            <div class="config-panel">
-                <h2>System Configuration</h2>
-                <div class="config-item">
-                    <label>Version</label>
-                    <input type="text" id="cfg-version" readonly>
-                </div>
-                <div class="config-item">
-                    <label>Features</label>
-                    <div id="cfg-features" class="feature-list"></div>
+            <ul class="nav-menu">
+                <li class="nav-label">Main</li>
+                <li>
+                    <a href="#" class="nav-item active" data-tab="overview">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Overview</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-item" data-tab="metrics">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Metrics</span>
+                    </a>
+                </li>
+
+                <li class="nav-label">Management</li>
+                <li>
+                    <a href="#" class="nav-item" data-tab="config">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Configuration</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-item" data-tab="audit">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Audit Logs</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Super Admin</span>
+                    </div>
                 </div>
             </div>
-        </section>
+        </nav>
 
-        <section id="metrics" class="tab-content">
-            <div class="metrics-panel">
-                <h2>Real-time Metrics</h2>
-                <div class="chart-placeholder">
-                    <p>📊 Metrics visualization coming soon</p>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="page-header">
+                    <h1 id="page-title">Overview</h1>
+                    <p class="breadcrumbs">Dashboard / Overview</p>
                 </div>
-            </div>
-        </section>
+                <div class="status-pill online">
+                    <span class="dot"></span>
+                    System Operational
+                </div>
+            </header>
 
-        <section id="audit" class="tab-content">
-            <div class="audit-panel">
-                <h2>Audit Log</h2>
-                <div class="audit-filters">
-                    <input type="text" id="filter-user" placeholder="Filter by user...">
-                    <input type="text" id="filter-action" placeholder="Filter by action...">
-                    <button id="btn-refresh">Refresh</button>
+            <!-- Dashboard Overview Tab -->
+            <section id="overview" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon color-blue">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Total Requests</h3>
+                            <div class="stat-value" id="stat-requests">--</div>
+                            <span class="stat-trend positive">
+                                <i class="fa-solid fa-arrow-trend-up"></i> Live
+                            </span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon color-purple">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Tokens Consumed</h3>
+                            <div class="stat-value" id="stat-tokens">--</div>
+                            <span class="stat-subtext">Cumulative Usage</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon color-green">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Active Sessions</h3>
+                            <div class="stat-value" id="stat-sessions">0</div>
+                            <span class="stat-subtext">Current Load</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon color-orange">
+                            <i class="fa-solid fa-stopwatch"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Avg Latency</h3>
+                            <div class="stat-value" id="stat-latency">--</div>
+                            <span class="stat-subtext">Response Time</span>
+                        </div>
+                    </div>
                 </div>
-                <table class="audit-table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Resource</th>
-                            <th>Outcome</th>
-                        </tr>
-                    </thead>
-                    <tbody id="audit-body">
-                        <tr><td colspan="5">No audit entries</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+
+                <!-- Placeholder for future charts -->
+                <div class="content-row">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Traffic Volume</h3>
+                            <div class="card-actions">
+                                <button class="btn-icon"><i class="fa-solid fa-ellipsis"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body chart-placeholder">
+                            <i class="fa-solid fa-chart-area"></i>
+                            <p>Real-time traffic visualization coming soon</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuration Tab -->
+            <section id="config" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>System Configuration</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>System Version</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-code-branch"></i>
+                                <input type="text" id="cfg-version" readonly value="Loading...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Enabled Features</label>
+                            <div id="cfg-features" class="tags-container">
+                                <!-- Tags will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metrics Tab (Simplified View for now) -->
+            <section id="metrics" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Performance Metrics</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="metrics-list">
+                            <div class="metric-item">
+                                <span class="label">Requests Total</span>
+                                <span class="value" id="metric-req-total">--</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Tokens Used</span>
+                                <span class="value" id="metric-tok-total">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audit Log Tab -->
+            <section id="audit" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Audit Trails</h3>
+                        <button id="btn-refresh" class="btn-primary">
+                            <i class="fa-solid fa-rotate-right"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="filter-user" placeholder="Search user ID...">
+                        </div>
+                        <div class="search-box">
+                            <i class="fa-solid fa-filter"></i>
+                            <input type="text" id="filter-action" placeholder="Filter action...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Resource</th>
+                                    <th>Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-body">
+                                <tr>
+                                    <td colspan="5" class="empty-state">Loading records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>
