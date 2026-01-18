@@ -23,6 +23,10 @@ chrono = "0.4"
 reqwest.workspace = true
 aws-sdk-s3 = "1"
 aws-config = "1"
+uuid = { version = "1.10", features = ["v4", "serde"] }
+tracing.workspace = true
+
+
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["test-util", "macros"] }

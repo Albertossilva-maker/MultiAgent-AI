@@ -27,8 +27,10 @@ async fn test_v0_8_features_integration() {
         metrics: metrics_handle.clone(),
         mcp_registry: Arc::new(multi_agent_skills::McpRegistry::new()),
         providers: Arc::new(tokio::sync::RwLock::new(Vec::new())),
+        provider_store: None,
         secrets: Arc::new(multi_agent_governance::AesGcmSecretsManager::new(None)),
     });
+
 
     // Initialize Gateway
     let config = GatewayConfig {

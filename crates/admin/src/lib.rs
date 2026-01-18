@@ -30,6 +30,7 @@ struct Asset;
 
 use multi_agent_skills::mcp_registry::{McpRegistry, McpServerInfo};
 use multi_agent_governance::SecretsManager;
+use multi_agent_core::traits::ProviderStore;
 
 // =========================================
 // State & Data Structures
@@ -41,10 +42,15 @@ pub struct AdminState {
     pub rbac: Arc<dyn RbacConnector>,
     pub metrics: Option<metrics_exporter_prometheus::PrometheusHandle>,
     pub mcp_registry: Arc<McpRegistry>,
+    /// In-memory provider storage (used when `provider_store` is None).
     pub providers: Arc<RwLock<Vec<ProviderEntry>>>,
+    /// External provider store (e.g., Redis/PostgreSQL).
+    /// When set, this is used instead of in-memory `providers`.
+    pub provider_store: Option<Arc<dyn ProviderStore>>,
     /// Secrets manager for encrypting sensitive data (API keys).
     pub secrets: Arc<dyn SecretsManager>,
 }
+
 
 /// LLM Provider entry.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -175,6 +181,25 @@ async fn auth_middleware(
 async fn list_providers(
     State(state): State<Arc<AdminState>>,
 ) -> Json<Vec<ProviderEntry>> {
+    if let Some(store) = &state.provider_store {
+        if let Ok(providers) = store.list().await {
+            // Convert legacy core::ProviderEntry to admin::ProviderEntry
+            let admin_providers = providers.into_iter().map(|p| ProviderEntry {
+                id: p.id,
+                vendor: p.vendor,
+                model_id: p.model_id,
+                description: p.description,
+                base_url: p.base_url,
+                version: p.version,
+                api_key_id: p.api_key_id,
+                capabilities: p.capabilities,
+                status: p.status,
+            }).collect();
+            return Json(admin_providers);
+        }
+        tracing::error!("Failed to list providers from store");
+        return Json(vec![]);
+    }
     let providers = state.providers.read().await;
     Json(providers.clone())
 }
@@ -198,13 +223,45 @@ async fn add_provider(
         description: req.description,
         base_url: req.base_url,
         version: req.version,
-        api_key_id, // Store reference to encrypted key, not the key itself
+        api_key_id,
         capabilities: req.capabilities,
-        status: "pending".to_string(),
+        status: "active".to_string(), // Set to active by default
     };
 
-    let mut providers = state.providers.write().await;
-    providers.push(entry.clone());
+    if let Some(store) = &state.provider_store {
+        // Convert to core::ProviderEntry
+        let core_entry = multi_agent_core::traits::ProviderEntry {
+            id: entry.id.clone(),
+            vendor: entry.vendor.clone(),
+            model_id: entry.model_id.clone(),
+            description: entry.description.clone(),
+            base_url: entry.base_url.clone(),
+            version: entry.version.clone(),
+            api_key_id: entry.api_key_id.clone(),
+            capabilities: entry.capabilities.clone(),
+            status: entry.status.clone(),
+        };
+        store.upsert(&core_entry).await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    } else {
+        let mut providers = state.providers.write().await;
+        providers.push(entry.clone());
+    }
+    
+    // Log audit event
+    let _ = state.audit_store.log(multi_agent_governance::AuditEntry {
+        id: uuid::Uuid::new_v4().to_string(),
+        timestamp: chrono::Utc::now().to_rfc3339(),
+        user_id: "admin".to_string(),
+        action: "ADD_PROVIDER".to_string(),
+        resource: entry.id.clone(),
+        outcome: multi_agent_governance::AuditOutcome::Success,
+        metadata: Some(serde_json::json!({
+            "vendor": entry.vendor,
+            "model_id": entry.model_id
+        })),
+    }).await;
+
 
     Ok(Json(entry))
 }
@@ -276,16 +333,46 @@ async fn delete_provider(
     State(state): State<Arc<AdminState>>,
     Path(id): Path<String>,
 ) -> StatusCode {
-    let mut providers = state.providers.write().await;
-    
-    // Find and remove the provider, cleaning up secrets
-    if let Some(pos) = providers.iter().position(|p| p.id == id) {
-        let provider = providers.remove(pos);
-        // Clean up the encrypted API key
-        let _ = state.secrets.delete(&provider.api_key_id).await;
+    let mut deleted = false;
+    let mut api_key_id = None;
+
+    if let Some(store) = &state.provider_store {
+        // First get the provider to find the api_key_id
+        if let Ok(Some(provider)) = store.get(&id).await {
+            api_key_id = Some(provider.api_key_id.clone());
+            if let Ok(result) = store.delete(&id).await {
+                deleted = result;
+            }
+        }
+    } else {
+        let mut providers = state.providers.write().await;
+        if let Some(pos) = providers.iter().position(|p| p.id == id) {
+            api_key_id = Some(providers[pos].api_key_id.clone());
+            providers.remove(pos);
+            deleted = true;
+        }
     }
-    
-    StatusCode::NO_CONTENT
+
+    if deleted {
+        // Also cleanup the secret
+        if let Some(key_id) = api_key_id {
+            let _ = state.secrets.delete(&key_id).await;
+        }
+        
+        let _ = state.audit_store.log(multi_agent_governance::AuditEntry {
+            id: uuid::Uuid::new_v4().to_string(),
+            timestamp: chrono::Utc::now().to_rfc3339(),
+            user_id: "admin".to_string(),
+            action: "DELETE_PROVIDER".to_string(),
+            resource: id,
+            outcome: multi_agent_governance::AuditOutcome::Success,
+            metadata: None,
+        }).await;
+
+        StatusCode::NO_CONTENT
+    } else {
+        StatusCode::NOT_FOUND
+    }
 }
 
 

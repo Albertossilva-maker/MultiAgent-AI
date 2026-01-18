@@ -195,8 +195,10 @@ async fn main() -> anyhow::Result<()> {
         metrics: Some(metrics_handle.clone()),
         mcp_registry: mcp_registry.clone(),
         providers: Arc::new(tokio::sync::RwLock::new(Vec::new())),
+        provider_store: None, // TODO: Use Redis backend when REDIS_URL is set
         secrets: secrets_manager,
     });
+
     
     // =========================================================================
     // Start the server

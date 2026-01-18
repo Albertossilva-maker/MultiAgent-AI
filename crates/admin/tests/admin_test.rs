@@ -24,8 +24,10 @@ async fn test_admin_provider_crud_with_encryption() {
         metrics: None,
         mcp_registry,
         providers,
+        provider_store: None,
         secrets: secrets.clone(),
     });
+
 
     let app = multi_agent_admin::admin_router(state);
 
